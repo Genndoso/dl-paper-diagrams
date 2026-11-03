@@ -1,0 +1,12 @@
+{
+  "name": "dl-paper-diagrams",
+  "owner": {"name": "Genndoso"},
+  "plugins": [
+    {
+      "name": "dl-paper-diagrams",
+      "source": "./",
+      "description": "Deep-learning architecture figures in ML-paper style: interactive HTML plus static SVG.",
+      "version": "0.1.0"
+    }
+  ]
+}

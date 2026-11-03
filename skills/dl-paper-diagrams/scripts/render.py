@@ -50,8 +50,9 @@ def rich(s: str) -> str:
     # tspans with baseline-shift; dy reset keeps following text on the baseline
     s = re.sub(r"_\{(.+?)\}", r'<tspan baseline-shift="sub" font-size="70%">\1</tspan>', s)
     s = re.sub(r"\^\{(.+?)\}", r'<tspan baseline-shift="super" font-size="70%">\1</tspan>', s)
-    s = re.sub(r"_([A-Za-z0-9])", r'<tspan baseline-shift="sub" font-size="70%">\1</tspan>', s)
-    s = re.sub(r"\^([A-Za-z0-9])", r'<tspan baseline-shift="super" font-size="70%">\1</tspan>', s)
+    # bare x_i / x^2: one character, after a short symbol — so identifiers like zelda_v2 or qual_w stay intact
+    s = re.sub(r"(?<![A-Za-z]{3})_([A-Za-z0-9])(?![A-Za-z0-9])", r'<tspan baseline-shift="sub" font-size="70%">\1</tspan>', s)
+    s = re.sub(r"(?<![A-Za-z]{3})\^([A-Za-z0-9])(?![A-Za-z0-9])", r'<tspan baseline-shift="super" font-size="70%">\1</tspan>', s)
     return s
 
 

@@ -57,4 +57,4 @@ Interactive-layer fields: `title`, `shape`, `info`, `params`. The tooltip shows 
 
 ## Inline markup
 
-`x_{i}`, `x^{2}`, `x_i`, `x^2` → subscript/superscript; `**bold**`; `` `mono` ``. Markup is supported in labels, notes and tooltips.
+`x_{i}`, `x^{2}` → subscript/superscript; bare `x_i`, `x^2` only after a 1–2-letter symbol (so `zelda_v2`, `qual_w` stay as is); `**bold**`; `` `mono` ``. Markup is supported in labels, notes and tooltips.
