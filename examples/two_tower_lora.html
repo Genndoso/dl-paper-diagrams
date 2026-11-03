@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fig. 1. Two-tower retrieval encoder with LoRA and a Matryoshka head</title>
+<style>
+:root{--bg:#fafafa;--card:#fff;--ink:#222;--sub:#666;--line:#ddd;--acc:#d17a22}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111;--card:#1b1b1b;--ink:#e8e8e8;--sub:#aaa;--line:#333;--acc:#f0a050}}
+:root[data-theme="dark"]{--bg:#111;--card:#1b1b1b;--ink:#e8e8e8;--sub:#aaa;--line:#333;--acc:#f0a050}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Helvetica,Arial,sans-serif}
+main{max-width:1280px;margin:0 auto;padding:16px}
+h1{font-size:18px;margin:4px 0 10px}
+.bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+button{font:inherit;font-size:12px;padding:4px 10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;cursor:pointer}
+button.on{border-color:var(--acc);color:var(--acc)}
+.fig{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;overflow:auto}
+.fig svg{display:block;max-width:100%;height:auto}
+.node.ia{cursor:pointer}
+.node.ia:hover > rect,.node.ia:hover > circle{filter:brightness(0.93);stroke-width:2.2}
+.dim{opacity:.18;transition:opacity .15s}
+.hl > rect,.hl > circle{stroke-width:2.6 !important}
+path.edge.hl{stroke-width:2.6 !important;stroke:var(--acc) !important}
+#tip{position:fixed;pointer-events:none;max-width:340px;background:var(--card);color:var(--ink);border:1px solid var(--line);
+ border-radius:8px;padding:8px 10px;font-size:12.5px;box-shadow:0 4px 18px rgba(0,0,0,.15);display:none;z-index:9}
+#tip b{display:block;margin-bottom:2px}#tip code{font-family:Menlo,Consolas,monospace;font-size:12px;color:var(--acc)}
+#tip .k{color:var(--sub);font-size:11px}
+#step{min-height:22px;color:var(--sub);margin:8px 2px 0}
+.cap{color:var(--sub);font-size:13px;margin:8px 2px}
+</style></head><body><main>
+<h1>Fig. 1. Two-tower retrieval encoder with LoRA and a Matryoshka head</h1>
+<div class="bar" id="bar"></div>
+<div class="fig" id="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 470" width="1180" height="470" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#222222"/></marker></defs>
+<rect width="1180" height="470" fill="#ffffff"/>
+<text x="590.0" y="28.0" font-size="16" text-anchor="middle" fill="#222222" font-weight="bold">Fig. 1. Two-tower retrieval encoder with LoRA and a Matryoshka head</text>
+<path id="e0" class="edge tag-anchor" d="M100.0,105.0 L140.0,105.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e1" class="edge tag-anchor" d="M370.0,105.0 L410.0,105.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="390.0" y="99.0" font-size="11" text-anchor="middle" fill="#555555">H</text>
+<path id="e2" class="edge tag-anchor" d="M506.0,105.0 L556.0,105.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e3" class="edge " d="M506.0,182.0 L536.0,182.0 L536.0,149.0 L556.0,149.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e4" class="edge tag-anchor" d="M580.0,105.0 L630.0,105.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e5" class="edge tag-anchor" d="M800.0,105.0 L846.0,105.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e6" class="edge " d="M100.0,325.0 L140.0,325.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e7" class="edge " d="M370.0,325.0 L410.0,325.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="390.0" y="319.0" font-size="11" text-anchor="middle" fill="#555555">H</text>
+<path id="e8" class="edge " d="M506.0,325.0 L556.0,325.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e9" class="edge " d="M506.0,402.0 L536.0,402.0 L536.0,369.0 L556.0,369.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e10" class="edge " d="M580.0,325.0 L630.0,325.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e11" class="edge " d="M800.0,325.0 L846.0,325.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e12" class="edge tag-loss" d="M868.0,105.0 L946.0,105.0 L946.0,187.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e13" class="edge " d="M255.0,150.0 L255.0,280.0" fill="none" stroke="#222222" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="261.0" y="219.0" font-size="11" text-anchor="start" fill="#555555">shared θ</text>
+<path id="e14" class="edge " d="M715.0,140.0 L715.0,290.0" fill="none" stroke="#222222" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="721.0" y="219.0" font-size="11" text-anchor="start" fill="#555555">shared</text>
+<path id="e15" class="edge tag-loss" d="M868.0,325.0 L946.0,325.0 L946.0,213.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<path id="e16" class="edge tag-loss" d="M974.0,200.0 L1010.0,200.0" fill="none" stroke="#222222" stroke-width="1.4" marker-end="url(#ar)"/>
+<g id="xa" class="node tag-anchor ia" data-kind="tensor">
+<title>xa · [T] · Anchor post text, tokenised.</title>
+<rect x="30.0" y="85.0" width="70.0" height="40.0" fill="#eeeeee" stroke="#777777" stroke-width="1.1"/>
+<text x="65.0" y="78.0" font-size="13" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">x<tspan baseline-shift="sub" font-size="70%">a</tspan></text>
+<text x="65.0" y="139.0" font-size="11" text-anchor="middle" fill="#555555">T tokens</text>
+</g>
+<g id="enc_a" class="node tag-anchor tag-lora ia" data-kind="frozen">
+<title>Decoder LM · [T] → [T, 2048] · Causal self-attention + SwiGLU blocks. LoRA on q, k, v, o, gate, up, down; y = W₀x + (α/r)·BAx.</title>
+<rect x="144.0" y="56.0" width="230.0" height="90.0" rx="7" fill="#dcebf7" stroke="#3f74a8" stroke-width="1" opacity="0.39999999999999997"/>
+<rect x="148.0" y="52.0" width="230.0" height="90.0" rx="7" fill="#dcebf7" stroke="#3f74a8" stroke-width="1" opacity="0.19999999999999996"/>
+<rect x="140.0" y="60.0" width="230.0" height="90.0" rx="7" fill="#dcebf7" stroke="#3f74a8" stroke-width="1.4"/>
+<rect x="318.0" y="66.0" width="46" height="78.0" rx="5" fill="#fde3c8" stroke="#d17a22" stroke-width="1.3"/>
+<text x="341.0" y="101.3" font-size="11" text-anchor="middle" fill="#222222" font-weight="bold">LoRA</text>
+<text x="341.0" y="115.8" font-size="9.5" text-anchor="middle" fill="#555555">r=16</text>
+<text x="229.0" y="92.5" font-size="13" text-anchor="middle" fill="#222222" font-weight="bold">Decoder LM</text>
+<text x="229.0" y="109.0" font-size="11.5" text-anchor="middle" fill="#555555">d<tspan baseline-shift="sub" font-size="70%">model</tspan> = 2048</text>
+<text x="229.0" y="126.0" font-size="11.5" text-anchor="middle" fill="#555555">W<tspan baseline-shift="sub" font-size="70%">0</tspan> frozen</text>
+<text x="148.0" y="74.0" font-size="10" text-anchor="start" fill="#3f74a8" font-weight="bold">× L</text>
+</g>
+<g id="pool_a" class="node tag-anchor ia" data-kind="frozen">
+<title>last-token · [T, 2048] → [2048]</title>
+<rect x="410.0" y="78.0" width="96.0" height="54.0" rx="7" fill="#dcebf7" stroke="#3f74a8" stroke-width="1.4"/>
+<text x="458.0" y="101.0" font-size="13" text-anchor="middle" fill="#222222" font-weight="bold">last-token</text>
+<text x="458.0" y="117.5" font-size="11.5" text-anchor="middle" fill="#555555">pool</text>
+</g>
+<g id="side_a" class="node  ia" data-kind="side">
+<title>side emb z · [96] · Precomputed embedding from another model (frozen).</title>
+<rect x="410.0" y="165.0" width="96.0" height="34.0" rx="7" fill="#e6d9f2" stroke="#7a52a0" stroke-width="1.4"/>
+<text x="458.0" y="186.2" font-size="12" text-anchor="middle" fill="#222222">side emb z</text>
+</g>
+<g id="phi_a" class="node tag-anchor ia" data-kind="tensor">
+<title>φa · [2048 + 96 + 1]</title>
+<rect x="556.0" y="50.0" width="24.0" height="94.6" fill="#eeeeee" stroke="#777777" stroke-width="1.1"/>
+<text x="568.0" y="101.3" font-size="11" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">w</text>
+<rect x="556.0" y="144.6" width="24.0" height="11.0" fill="#e6d9f2" stroke="#7a52a0" stroke-width="1.1"/>
+<text x="586.0" y="154.1" font-size="11" text-anchor="start" fill="#555555" font-family="Menlo, Consolas, monospace">z</text>
+<rect x="556.0" y="155.6" width="24.0" height="4.4" fill="#d9d9d9" stroke="#9a9a9a" stroke-width="1.1"/>
+<text x="568.0" y="43.0" font-size="13" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">φ<tspan baseline-shift="sub" font-size="70%">a</tspan></text>
+<text x="568.0" y="174.0" font-size="11" text-anchor="middle" fill="#555555">2145</text>
+</g>
+<g id="head_a" class="node tag-anchor tag-lora ia" data-kind="train">
+<title>Head h · [2145] → [256] · Residual MLP: LN → Linear 2048 → GELU → Dropout → Linear 256, plus a linear skip initialised to the identity slice.</title>
+<rect x="630.0" y="70.0" width="170.0" height="70.0" rx="7" fill="#fde3c8" stroke="#d17a22" stroke-width="1.4"/>
+<text x="715.0" y="101.0" font-size="13" text-anchor="middle" fill="#222222" font-weight="bold">Head h</text>
+<text x="715.0" y="117.5" font-size="11.5" text-anchor="middle" fill="#555555">W<tspan baseline-shift="sub" font-size="70%">0</tspan>φ + MLP(φ)</text>
+</g>
+<g id="e_a" class="node tag-anchor ia" data-kind="train">
+<title>ea · [256] ⊃ [64] · ℓ2-normalised after slicing.</title>
+<rect x="846.0" y="55.0" width="22.0" height="25.0" fill="#fbe9b7" stroke="#b8901c" stroke-width="1.1"/>
+<rect x="846.0" y="80.0" width="22.0" height="75.0" fill="#fde3c8" stroke="#d17a22" stroke-width="1.1"/>
+<text x="857.0" y="48.0" font-size="13" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">e<tspan baseline-shift="sub" font-size="70%">a</tspan></text>
+<text x="857.0" y="169.0" font-size="11" text-anchor="middle" fill="#555555">256 ⊃ 64</text>
+</g>
+<g id="xc" class="node  ia" data-kind="tensor">
+<title>xc · [T] · Candidate post text.</title>
+<rect x="30.0" y="305.0" width="70.0" height="40.0" fill="#eeeeee" stroke="#777777" stroke-width="1.1"/>
+<text x="65.0" y="298.0" font-size="13" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">x<tspan baseline-shift="sub" font-size="70%">c</tspan></text>
+<text x="65.0" y="359.0" font-size="11" text-anchor="middle" fill="#555555">T tokens</text>
+</g>
+<g id="enc_c" class="node tag-lora ia" data-kind="frozen">
+<title>Decoder LM · [T] → [T, 2048]</title>
+<rect x="144.0" y="276.0" width="230.0" height="90.0" rx="7" fill="#dcebf7" stroke="#3f74a8" stroke-width="1" opacity="0.39999999999999997"/>
+<rect x="148.0" y="272.0" width="230.0" height="90.0" rx="7" fill="#dcebf7" stroke="#3f74a8" stroke-width="1" opacity="0.19999999999999996"/>
+<rect x="140.0" y="280.0" width="230.0" height="90.0" rx="7" fill="#dcebf7" stroke="#3f74a8" stroke-width="1.4"/>
+<rect x="318.0" y="286.0" width="46" height="78.0" rx="5" fill="#fde3c8" stroke="#d17a22" stroke-width="1.3"/>
+<text x="341.0" y="321.4" font-size="11" text-anchor="middle" fill="#222222" font-weight="bold">LoRA</text>
+<text x="341.0" y="335.8" font-size="9.5" text-anchor="middle" fill="#555555">r=16</text>
+<text x="229.0" y="312.6" font-size="13" text-anchor="middle" fill="#222222" font-weight="bold">Decoder LM</text>
+<text x="229.0" y="329.0" font-size="11.5" text-anchor="middle" fill="#555555">d<tspan baseline-shift="sub" font-size="70%">model</tspan> = 2048</text>
+<text x="229.0" y="346.0" font-size="11.5" text-anchor="middle" fill="#555555">W<tspan baseline-shift="sub" font-size="70%">0</tspan> frozen</text>
+<text x="148.0" y="294.0" font-size="10" text-anchor="start" fill="#3f74a8" font-weight="bold">× L</text>
+</g>
+<g id="pool_c" class="node  ia" data-kind="frozen">
+<title>last-token · [T, 2048] → [2048]</title>
+<rect x="410.0" y="298.0" width="96.0" height="54.0" rx="7" fill="#dcebf7" stroke="#3f74a8" stroke-width="1.4"/>
+<text x="458.0" y="321.1" font-size="13" text-anchor="middle" fill="#222222" font-weight="bold">last-token</text>
+<text x="458.0" y="337.5" font-size="11.5" text-anchor="middle" fill="#555555">pool</text>
+</g>
+<g id="side_c" class="node  ia" data-kind="side">
+<title>side emb z · [96]</title>
+<rect x="410.0" y="385.0" width="96.0" height="34.0" rx="7" fill="#e6d9f2" stroke="#7a52a0" stroke-width="1.4"/>
+<text x="458.0" y="406.2" font-size="12" text-anchor="middle" fill="#222222">side emb z</text>
+</g>
+<g id="phi_c" class="node  ia" data-kind="tensor">
+<title>φc · [2145]</title>
+<rect x="556.0" y="270.0" width="24.0" height="94.6" fill="#eeeeee" stroke="#777777" stroke-width="1.1"/>
+<text x="568.0" y="321.3" font-size="11" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">w</text>
+<rect x="556.0" y="364.6" width="24.0" height="11.0" fill="#e6d9f2" stroke="#7a52a0" stroke-width="1.1"/>
+<text x="586.0" y="374.1" font-size="11" text-anchor="start" fill="#555555" font-family="Menlo, Consolas, monospace">z</text>
+<rect x="556.0" y="375.6" width="24.0" height="4.4" fill="#d9d9d9" stroke="#9a9a9a" stroke-width="1.1"/>
+<text x="568.0" y="263.0" font-size="13" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">φ<tspan baseline-shift="sub" font-size="70%">c</tspan></text>
+<text x="568.0" y="394.0" font-size="11" text-anchor="middle" fill="#555555">2145</text>
+</g>
+<g id="head_c" class="node tag-lora ia" data-kind="train">
+<title>Head h · [2145] → [256]</title>
+<rect x="630.0" y="290.0" width="170.0" height="70.0" rx="7" fill="#fde3c8" stroke="#d17a22" stroke-width="1.4"/>
+<text x="715.0" y="321.1" font-size="13" text-anchor="middle" fill="#222222" font-weight="bold">Head h</text>
+<text x="715.0" y="337.5" font-size="11.5" text-anchor="middle" fill="#555555">W<tspan baseline-shift="sub" font-size="70%">0</tspan>φ + MLP(φ)</text>
+</g>
+<g id="e_c" class="node  ia" data-kind="train">
+<title>ec · [256] ⊃ [64]</title>
+<rect x="846.0" y="275.0" width="22.0" height="25.0" fill="#fbe9b7" stroke="#b8901c" stroke-width="1.1"/>
+<rect x="846.0" y="300.0" width="22.0" height="75.0" fill="#fde3c8" stroke="#d17a22" stroke-width="1.1"/>
+<text x="857.0" y="268.0" font-size="13" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">e<tspan baseline-shift="sub" font-size="70%">c</tspan></text>
+<text x="857.0" y="389.0" font-size="11" text-anchor="middle" fill="#555555">256 ⊃ 64</text>
+</g>
+<g id="sim" class="node tag-loss ia" data-kind="op">
+<title>s·cos · [B, B+K] · Logits s·⟨e_a, e_c⟩, s = 1/τ learned.</title>
+<circle cx="946.0" cy="215.0" r="28.0" fill="#ffffff" stroke="#444444" stroke-width="1.4"/>
+<text x="946.0" y="219.3" font-size="14" text-anchor="middle" fill="#222222">s·cos</text>
+</g>
+<g id="loss" class="node tag-loss ia" data-kind="loss">
+<title>ℒNCE + ℒBCE</title>
+<rect x="1010.0" y="175.0" width="140.0" height="50.0" rx="7" fill="#f7d4d4" stroke="#b33a3a" stroke-width="1.4"/>
+<text x="1080.0" y="196.1" font-size="13" text-anchor="middle" fill="#222222" font-weight="bold">ℒ<tspan baseline-shift="sub" font-size="70%">NCE</tspan> + ℒ<tspan baseline-shift="sub" font-size="70%">BCE</tspan></text>
+<text x="1080.0" y="212.5" font-size="11.5" text-anchor="middle" fill="#555555">mean over d</text>
+</g>
+<rect x="20" y="446" width="14" height="12" fill="#dcebf7" stroke="#3f74a8"/>
+<text x="40.0" y="456.0" font-size="11" text-anchor="start" fill="#555555">frozen</text>
+<rect x="93.0" y="446" width="14" height="12" fill="#fde3c8" stroke="#d17a22"/>
+<text x="113.0" y="456.0" font-size="11" text-anchor="start" fill="#555555">trainable</text>
+<rect x="185.5" y="446" width="14" height="12" fill="#eeeeee" stroke="#777777"/>
+<text x="205.5" y="456.0" font-size="11" text-anchor="start" fill="#555555">tensor</text>
+<rect x="258.5" y="446" width="14" height="12" fill="#e6d9f2" stroke="#7a52a0"/>
+<text x="278.5" y="456.0" font-size="11" text-anchor="start" fill="#555555">side input</text>
+<rect x="357.5" y="446" width="14" height="12" fill="#f7d4d4" stroke="#b33a3a"/>
+<text x="377.5" y="456.0" font-size="11" text-anchor="start" fill="#555555">loss</text>
+<text x="590.0" y="434.0" font-size="12" text-anchor="middle" fill="#555555" font-style="italic">Weights are shared between the towers (dashed). Losses are averaged over Matryoshka prefixes d ∈ {256, 64}.</text>
+</svg>
+</div>
+<div id="step"></div>
+<p class="cap">Hover a block for shapes and details · click to trace its data flow · click empty space to reset.</p>
+</main><div id="tip"></div>
+<script>
+const META={"xa": {"title": "xa", "shape": "[T]", "info": "Anchor post text, tokenised.", "params": "", "kind": "tensor"}, "enc_a": {"title": "Decoder LM", "shape": "[T] → [T, 2048]", "info": "Causal self-attention + SwiGLU blocks. LoRA on q, k, v, o, gate, up, down; y = W₀x + (α/r)·BAx.", "params": "≈2B frozen, ≈20M LoRA", "kind": "frozen"}, "pool_a": {"title": "last-token", "shape": "[T, 2048] → [2048]", "info": "", "params": "", "kind": "frozen"}, "side_a": {"title": "side emb z", "shape": "[96]", "info": "Precomputed embedding from another model (frozen).", "params": "", "kind": "side"}, "phi_a": {"title": "φa", "shape": "[2048 + 96 + 1]", "info": "", "params": "", "kind": "tensor"}, "head_a": {"title": "Head h", "shape": "[2145] → [256]", "info": "Residual MLP: LN → Linear 2048 → GELU → Dropout → Linear 256, plus a linear skip initialised to the identity slice.", "params": "", "kind": "train"}, "e_a": {"title": "ea", "shape": "[256] ⊃ [64]", "info": "ℓ2-normalised after slicing.", "params": "", "kind": "train"}, "xc": {"title": "xc", "shape": "[T]", "info": "Candidate post text.", "params": "", "kind": "tensor"}, "enc_c": {"title": "Decoder LM", "shape": "[T] → [T, 2048]", "info": "", "params": "", "kind": "frozen"}, "pool_c": {"title": "last-token", "shape": "[T, 2048] → [2048]", "info": "", "params": "", "kind": "frozen"}, "side_c": {"title": "side emb z", "shape": "[96]", "info": "", "params": "", "kind": "side"}, "phi_c": {"title": "φc", "shape": "[2145]", "info": "", "params": "", "kind": "tensor"}, "head_c": {"title": "Head h", "shape": "[2145] → [256]", "info": "", "params": "", "kind": "train"}, "e_c": {"title": "ec", "shape": "[256] ⊃ [64]", "info": "", "params": "", "kind": "train"}, "sim": {"title": "s·cos", "shape": "[B, B+K]", "info": "Logits s·⟨e_a, e_c⟩, s = 1/τ learned.", "params": "", "kind": "op"}, "loss": {"title": "ℒNCE + ℒBCE", "shape": "", "info": "", "params": "", "kind": "loss"}}, EDGES=[{"id": "e0", "from": "xa", "to": "enc_a"}, {"id": "e1", "from": "enc_a", "to": "pool_a"}, {"id": "e2", "from": "pool_a", "to": "phi_a"}, {"id": "e3", "from": "side_a", "to": "phi_a"}, {"id": "e4", "from": "phi_a", "to": "head_a"}, {"id": "e5", "from": "head_a", "to": "e_a"}, {"id": "e6", "from": "xc", "to": "enc_c"}, {"id": "e7", "from": "enc_c", "to": "pool_c"}, {"id": "e8", "from": "pool_c", "to": "phi_c"}, {"id": "e9", "from": "side_c", "to": "phi_c"}, {"id": "e10", "from": "phi_c", "to": "head_c"}, {"id": "e11", "from": "head_c", "to": "e_c"}, {"id": "e12", "from": "e_a", "to": "sim"}, {"id": "e13", "from": "enc_a", "to": "enc_c"}, {"id": "e14", "from": "head_a", "to": "head_c"}, {"id": "e15", "from": "e_c", "to": "sim"}, {"id": "e16", "from": "sim", "to": "loss"}], TAGS=[{"tag": "lora", "label": "trainable", "info": "Only LoRA adapters, the head and the temperature receive gradients."}, {"tag": "anchor", "label": "anchor tower"}, {"tag": "loss", "label": "objective", "info": "ℒ = ℒ_NCE + ℒ_BCE over in-batch and hard negatives."}], STEPS=[{"nodes": ["xa", "enc_a", "pool_a"], "text": "The anchor text is encoded by a decoder-only LM; the last token is the sequence embedding."}, {"nodes": ["pool_a", "phi_a", "side_a"], "text": "A side embedding is concatenated with the LM vector: φ = [w; z; 𝟙_z]."}, {"nodes": ["phi_a", "head_a", "e_a"], "text": "A residual MLP head maps φ to 256d; prefixes are ℓ2-normalised (Matryoshka)."}, {"nodes": ["e_a", "e_c", "sim", "loss"], "text": "Cosine logits with a learned temperature feed InfoNCE + BCE."}];
+const svg=document.querySelector('#fig svg'), tip=document.getElementById('tip'), bar=document.getElementById('bar');
+const $=id=>svg.getElementById?svg.getElementById(id):document.getElementById(id);
+svg.querySelectorAll('title').forEach(t=>t.remove());
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function fmt(s){return esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/_\{([^}]+)\}/g,'<sub>$1</sub>').replace(/\^\{([^}]+)\}/g,'<sup>$1</sup>')}
+svg.querySelectorAll('.node.ia').forEach(g=>{
+  const m=META[g.id]; if(!m) return;
+  g.addEventListener('mousemove',ev=>{
+    tip.innerHTML='<b>'+fmt(m.title)+'</b>'+(m.shape?'<div><code>'+fmt(m.shape)+'</code></div>':'')+
+      (m.info?'<div>'+fmt(m.info)+'</div>':'')+(m.params?'<div class="k">params: '+fmt(m.params)+'</div>':'')+
+      '<div class="k">'+m.kind+'</div>';
+    tip.style.display='block';
+    const x=Math.min(ev.clientX+14,innerWidth-360), y=Math.min(ev.clientY+14,innerHeight-tip.offsetHeight-10);
+    tip.style.left=x+'px'; tip.style.top=y+'px';});
+  g.addEventListener('mouseleave',()=>tip.style.display='none');
+  g.addEventListener('click',ev=>{ev.stopPropagation();trace(g.id)});
+});
+function reset(){svg.querySelectorAll('.dim,.hl').forEach(e=>e.classList.remove('dim','hl'));document.getElementById('step').textContent=''}
+function highlight(nodes,edges){
+  svg.querySelectorAll('.node,.edge').forEach(e=>e.classList.add('dim'));
+  nodes.forEach(n=>{const e=$(n); if(e){e.classList.remove('dim');e.classList.add('hl')}});
+  edges.forEach(n=>{const e=$(n); if(e){e.classList.remove('dim');e.classList.add('hl')}});}
+function trace(id){
+  const nodes=new Set([id]),edges=new Set();
+  for(const dir of ['from','to']){const other=dir==='from'?'to':'from';let front=[id];
+    while(front.length){const nx=[];for(const n of front)for(const e of EDGES)if(e[dir]===n&&!edges.has(e.id)){edges.add(e.id);
+      if(!nodes.has(e[other])){nodes.add(e[other]);nx.push(e[other])}}front=nx}}
+  highlight(nodes,edges);}
+document.getElementById('fig').addEventListener('click',reset);
+function btn(label,fn){const b=document.createElement('button');b.textContent=label;b.onclick=()=>fn(b);bar.appendChild(b);return b}
+TAGS.forEach(t=>btn(t.label||t.tag,b=>{const on=!b.classList.contains('on');bar.querySelectorAll('button.tag').forEach(x=>x.classList.remove('on'));
+  reset(); if(on){b.classList.add('on');const ns=[...svg.querySelectorAll('.node.tag-'+t.tag)].map(e=>e.id),
+  es=[...svg.querySelectorAll('.edge.tag-'+t.tag)].map(e=>e.id);highlight(ns,es);document.getElementById('step').textContent=t.info||''}}).classList.add('tag'));
+if(STEPS.length){let k=-1;const show=()=>{reset();if(k<0)return;const s=STEPS[k];highlight(s.nodes||[],
+  EDGES.filter(e=>(s.nodes||[]).includes(e.from)&&(s.nodes||[]).includes(e.to)).map(e=>e.id).concat(s.edges||[]));
+  document.getElementById('step').innerHTML='<b>'+(k+1)+'/'+STEPS.length+'</b> '+fmt(s.text||'')};
+  btn('◀ step',()=>{k=Math.max(-1,k-1);show()});btn('step ▶',()=>{k=Math.min(STEPS.length-1,k+1);show()});}
+btn('SVG ⤓',()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([svg.outerHTML],{type:'image/svg+xml'}));
+  a.download='two_tower_lora.svg';a.click()});
+btn('PNG ⤓',()=>{const vb=svg.viewBox.baseVal,c=document.createElement('canvas');c.width=vb.width*2;c.height=vb.height*2;
+  const img=new Image();img.onload=()=>{c.getContext('2d').drawImage(img,0,0,c.width,c.height);c.toBlob(b=>{const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download='two_tower_lora.png';a.click()})};
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg.outerHTML)});
+</script></body></html>

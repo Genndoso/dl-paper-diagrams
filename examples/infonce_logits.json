@@ -1,0 +1,22 @@
+{
+ "name": "infonce_logits",
+ "title": "Fig. 2. InfoNCE logits with in-batch and hard negatives",
+ "width": 900,
+ "height": 430,
+ "legend": ["target", "tensor", "hard", "mask", "side"],
+ "nodes": [
+  {"id": "M", "type": "matrix", "x": 130, "y": 90, "rows": 5, "cols": 7, "cell": 44, "col_gaps": [5],
+   "diag": "target", "col_kind": {"5": "hard", "6": "hard"}, "cells": {"1,3": "mask", "3,1": "mask"},
+   "col_labels": ["c_{1}", "c_{2}", "c_{3}", "c_{4}", "c_{5}", "n_{i1}", "n_{i2}"],
+   "row_labels": ["a_{1}", "a_{2}", "a_{3}", "a_{4}", "a_{5}"],
+   "row_right": ["w_{1}", "w_{2}", "w_{3}", "w_{4}", "w_{5}"],
+   "title": "logits ℓ_{ij} = s·⟨e_{a_i}, e_{c_j}⟩ − λ_{j}", "shape": "[B, B + K]",
+   "info": "Row-wise softmax cross-entropy with the diagonal as target; × = labelled positives masked out of the denominator."},
+  {"id": "f1", "type": "text", "x": 130, "y": 335, "label": ["ℓ_{ij} = s·⟨e_{a_i}, e_{c_j}⟩ − λ_{j}", "ℒ = Σ_{i} w_{i}·CE(ℓ_{i·}, i) / Σ_{i} w_{i}"], "mono": true, "size": 13},
+  {"id": "f2", "type": "text", "x": 540, "y": 120, "label": ["λ_{j} = 0 — plain InfoNCE", "λ_{j} = α·log Q(c_{j}) — logQ correction", "w_{i} — per-pair weight", "", "hard negatives n_{ik}:", "• labelled negatives of a_{i}", "• kNN ranks 30–200, positive-aware filter"], "size": 12, "muted": true}
+ ],
+ "notes": [
+  {"x": 240, "y": 56, "text": "in-batch candidates (B × B)", "muted": true},
+  {"x": 394, "y": 56, "text": "hard neg. (B × K)", "muted": true}
+ ]
+}

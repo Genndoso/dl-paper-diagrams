@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fig. 2. InfoNCE logits with in-batch and hard negatives</title>
+<style>
+:root{--bg:#fafafa;--card:#fff;--ink:#222;--sub:#666;--line:#ddd;--acc:#d17a22}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111;--card:#1b1b1b;--ink:#e8e8e8;--sub:#aaa;--line:#333;--acc:#f0a050}}
+:root[data-theme="dark"]{--bg:#111;--card:#1b1b1b;--ink:#e8e8e8;--sub:#aaa;--line:#333;--acc:#f0a050}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Helvetica,Arial,sans-serif}
+main{max-width:1280px;margin:0 auto;padding:16px}
+h1{font-size:18px;margin:4px 0 10px}
+.bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+button{font:inherit;font-size:12px;padding:4px 10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;cursor:pointer}
+button.on{border-color:var(--acc);color:var(--acc)}
+.fig{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;overflow:auto}
+.fig svg{display:block;max-width:100%;height:auto}
+.node.ia{cursor:pointer}
+.node.ia:hover > rect,.node.ia:hover > circle{filter:brightness(0.93);stroke-width:2.2}
+.dim{opacity:.18;transition:opacity .15s}
+.hl > rect,.hl > circle{stroke-width:2.6 !important}
+path.edge.hl{stroke-width:2.6 !important;stroke:var(--acc) !important}
+#tip{position:fixed;pointer-events:none;max-width:340px;background:var(--card);color:var(--ink);border:1px solid var(--line);
+ border-radius:8px;padding:8px 10px;font-size:12.5px;box-shadow:0 4px 18px rgba(0,0,0,.15);display:none;z-index:9}
+#tip b{display:block;margin-bottom:2px}#tip code{font-family:Menlo,Consolas,monospace;font-size:12px;color:var(--acc)}
+#tip .k{color:var(--sub);font-size:11px}
+#step{min-height:22px;color:var(--sub);margin:8px 2px 0}
+.cap{color:var(--sub);font-size:13px;margin:8px 2px}
+</style></head><body><main>
+<h1>Fig. 2. InfoNCE logits with in-batch and hard negatives</h1>
+<div class="bar" id="bar"></div>
+<div class="fig" id="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#222222"/></marker></defs>
+<rect width="900" height="430" fill="#ffffff"/>
+<text x="450.0" y="28.0" font-size="16" text-anchor="middle" fill="#222222" font-weight="bold">Fig. 2. InfoNCE logits with in-batch and hard negatives</text>
+<g id="M" class="node  ia" data-kind="frozen">
+<title>logits ℓij = s·⟨ea_i, ec_j⟩ − λj · [B, B + K] · Row-wise softmax cross-entropy with the diagonal as target; × = labelled positives masked out of the denominator.</title>
+<rect class="cell" data-r="0" data-c="0" x="130.0" y="90.0" width="44" height="44" fill="#d3ebd3" stroke="#4b8b4b" stroke-width="1"/>
+<text x="152.0" y="118.0" font-size="16" text-anchor="middle" fill="#222222">+</text>
+<rect class="cell" data-r="0" data-c="1" x="174.0" y="90.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="0" data-c="2" x="218.0" y="90.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="0" data-c="3" x="262.0" y="90.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="0" data-c="4" x="306.0" y="90.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="0" data-c="5" x="360.0" y="90.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="382.0" y="118.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="0" data-c="6" x="404.0" y="90.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="426.0" y="118.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="1" data-c="0" x="130.0" y="134.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="1" data-c="1" x="174.0" y="134.0" width="44" height="44" fill="#d3ebd3" stroke="#4b8b4b" stroke-width="1"/>
+<text x="196.0" y="162.0" font-size="16" text-anchor="middle" fill="#222222">+</text>
+<rect class="cell" data-r="1" data-c="2" x="218.0" y="134.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="1" data-c="3" x="262.0" y="134.0" width="44" height="44" fill="#d9d9d9" stroke="#9a9a9a" stroke-width="1"/>
+<text x="284.0" y="162.0" font-size="16" text-anchor="middle" fill="#222222">×</text>
+<rect class="cell" data-r="1" data-c="4" x="306.0" y="134.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="1" data-c="5" x="360.0" y="134.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="382.0" y="162.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="1" data-c="6" x="404.0" y="134.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="426.0" y="162.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="2" data-c="0" x="130.0" y="178.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="2" data-c="1" x="174.0" y="178.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="2" data-c="2" x="218.0" y="178.0" width="44" height="44" fill="#d3ebd3" stroke="#4b8b4b" stroke-width="1"/>
+<text x="240.0" y="206.0" font-size="16" text-anchor="middle" fill="#222222">+</text>
+<rect class="cell" data-r="2" data-c="3" x="262.0" y="178.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="2" data-c="4" x="306.0" y="178.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="2" data-c="5" x="360.0" y="178.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="382.0" y="206.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="2" data-c="6" x="404.0" y="178.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="426.0" y="206.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="3" data-c="0" x="130.0" y="222.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="3" data-c="1" x="174.0" y="222.0" width="44" height="44" fill="#d9d9d9" stroke="#9a9a9a" stroke-width="1"/>
+<text x="196.0" y="250.0" font-size="16" text-anchor="middle" fill="#222222">×</text>
+<rect class="cell" data-r="3" data-c="2" x="218.0" y="222.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="3" data-c="3" x="262.0" y="222.0" width="44" height="44" fill="#d3ebd3" stroke="#4b8b4b" stroke-width="1"/>
+<text x="284.0" y="250.0" font-size="16" text-anchor="middle" fill="#222222">+</text>
+<rect class="cell" data-r="3" data-c="4" x="306.0" y="222.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="3" data-c="5" x="360.0" y="222.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="382.0" y="250.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="3" data-c="6" x="404.0" y="222.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="426.0" y="250.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="4" data-c="0" x="130.0" y="266.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="4" data-c="1" x="174.0" y="266.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="4" data-c="2" x="218.0" y="266.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="4" data-c="3" x="262.0" y="266.0" width="44" height="44" fill="#eeeeee" stroke="#777777" stroke-width="1"/>
+<rect class="cell" data-r="4" data-c="4" x="306.0" y="266.0" width="44" height="44" fill="#d3ebd3" stroke="#4b8b4b" stroke-width="1"/>
+<text x="328.0" y="294.0" font-size="16" text-anchor="middle" fill="#222222">+</text>
+<rect class="cell" data-r="4" data-c="5" x="360.0" y="266.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="382.0" y="294.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<rect class="cell" data-r="4" data-c="6" x="404.0" y="266.0" width="44" height="44" fill="#fbe9b7" stroke="#b8901c" stroke-width="1"/>
+<text x="426.0" y="294.0" font-size="16" text-anchor="middle" fill="#222222">−</text>
+<text x="152.0" y="80.0" font-size="12" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">c<tspan baseline-shift="sub" font-size="70%">1</tspan></text>
+<text x="196.0" y="80.0" font-size="12" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">c<tspan baseline-shift="sub" font-size="70%">2</tspan></text>
+<text x="240.0" y="80.0" font-size="12" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">c<tspan baseline-shift="sub" font-size="70%">3</tspan></text>
+<text x="284.0" y="80.0" font-size="12" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">c<tspan baseline-shift="sub" font-size="70%">4</tspan></text>
+<text x="328.0" y="80.0" font-size="12" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">c<tspan baseline-shift="sub" font-size="70%">5</tspan></text>
+<text x="382.0" y="80.0" font-size="12" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">n<tspan baseline-shift="sub" font-size="70%">i1</tspan></text>
+<text x="426.0" y="80.0" font-size="12" text-anchor="middle" fill="#222222" font-family="Menlo, Consolas, monospace">n<tspan baseline-shift="sub" font-size="70%">i2</tspan></text>
+<text x="120.0" y="117.0" font-size="12" text-anchor="end" fill="#222222" font-family="Menlo, Consolas, monospace">a<tspan baseline-shift="sub" font-size="70%">1</tspan></text>
+<text x="120.0" y="161.0" font-size="12" text-anchor="end" fill="#222222" font-family="Menlo, Consolas, monospace">a<tspan baseline-shift="sub" font-size="70%">2</tspan></text>
+<text x="120.0" y="205.0" font-size="12" text-anchor="end" fill="#222222" font-family="Menlo, Consolas, monospace">a<tspan baseline-shift="sub" font-size="70%">3</tspan></text>
+<text x="120.0" y="249.0" font-size="12" text-anchor="end" fill="#222222" font-family="Menlo, Consolas, monospace">a<tspan baseline-shift="sub" font-size="70%">4</tspan></text>
+<text x="120.0" y="293.0" font-size="12" text-anchor="end" fill="#222222" font-family="Menlo, Consolas, monospace">a<tspan baseline-shift="sub" font-size="70%">5</tspan></text>
+<text x="460.0" y="117.0" font-size="12" text-anchor="start" fill="#7a52a0" font-family="Menlo, Consolas, monospace">w<tspan baseline-shift="sub" font-size="70%">1</tspan></text>
+<text x="460.0" y="161.0" font-size="12" text-anchor="start" fill="#7a52a0" font-family="Menlo, Consolas, monospace">w<tspan baseline-shift="sub" font-size="70%">2</tspan></text>
+<text x="460.0" y="205.0" font-size="12" text-anchor="start" fill="#7a52a0" font-family="Menlo, Consolas, monospace">w<tspan baseline-shift="sub" font-size="70%">3</tspan></text>
+<text x="460.0" y="249.0" font-size="12" text-anchor="start" fill="#7a52a0" font-family="Menlo, Consolas, monospace">w<tspan baseline-shift="sub" font-size="70%">4</tspan></text>
+<text x="460.0" y="293.0" font-size="12" text-anchor="start" fill="#7a52a0" font-family="Menlo, Consolas, monospace">w<tspan baseline-shift="sub" font-size="70%">5</tspan></text>
+</g>
+<g id="f1" class="node " data-kind="plain">
+<text x="130.0" y="335.0" font-size="13" text-anchor="start" fill="#222222" font-family="Menlo, Consolas, monospace">ℓ<tspan baseline-shift="sub" font-size="70%">ij</tspan> = s·⟨e<tspan baseline-shift="sub" font-size="70%">a<tspan baseline-shift="sub" font-size="70%">i</tspan></tspan>, e<tspan baseline-shift="sub" font-size="70%">c<tspan baseline-shift="sub" font-size="70%">j</tspan></tspan>⟩ − λ<tspan baseline-shift="sub" font-size="70%">j</tspan></text>
+<text x="130.0" y="353.0" font-size="13" text-anchor="start" fill="#222222" font-family="Menlo, Consolas, monospace">ℒ = Σ<tspan baseline-shift="sub" font-size="70%">i</tspan> w<tspan baseline-shift="sub" font-size="70%">i</tspan>·CE(ℓ<tspan baseline-shift="sub" font-size="70%">i·</tspan>, i) / Σ<tspan baseline-shift="sub" font-size="70%">i</tspan> w<tspan baseline-shift="sub" font-size="70%">i</tspan></text>
+</g>
+<g id="f2" class="node " data-kind="plain">
+<text x="540.0" y="120.0" font-size="12" text-anchor="start" fill="#555555">λ<tspan baseline-shift="sub" font-size="70%">j</tspan> = 0 — plain InfoNCE</text>
+<text x="540.0" y="137.0" font-size="12" text-anchor="start" fill="#555555">λ<tspan baseline-shift="sub" font-size="70%">j</tspan> = α·log Q(c<tspan baseline-shift="sub" font-size="70%">j</tspan>) — logQ correction</text>
+<text x="540.0" y="154.0" font-size="12" text-anchor="start" fill="#555555">w<tspan baseline-shift="sub" font-size="70%">i</tspan> — per-pair weight</text>
+<text x="540.0" y="171.0" font-size="12" text-anchor="start" fill="#555555"></text>
+<text x="540.0" y="188.0" font-size="12" text-anchor="start" fill="#555555">hard negatives n<tspan baseline-shift="sub" font-size="70%">ik</tspan>:</text>
+<text x="540.0" y="205.0" font-size="12" text-anchor="start" fill="#555555">• labelled negatives of a<tspan baseline-shift="sub" font-size="70%">i</tspan></text>
+<text x="540.0" y="222.0" font-size="12" text-anchor="start" fill="#555555">• kNN ranks 30–200, positive-aware filter</text>
+</g>
+<text x="240.0" y="56.0" font-size="12" text-anchor="middle" fill="#555555">in-batch candidates (B × B)</text>
+<text x="394.0" y="56.0" font-size="12" text-anchor="middle" fill="#555555">hard neg. (B × K)</text>
+<rect x="20" y="406" width="14" height="12" fill="#d3ebd3" stroke="#4b8b4b"/>
+<text x="40.0" y="416.0" font-size="11" text-anchor="start" fill="#555555">target / positive</text>
+<rect x="164.5" y="406" width="14" height="12" fill="#eeeeee" stroke="#777777"/>
+<text x="184.5" y="416.0" font-size="11" text-anchor="start" fill="#555555">tensor</text>
+<rect x="237.5" y="406" width="14" height="12" fill="#fbe9b7" stroke="#b8901c"/>
+<text x="257.5" y="416.0" font-size="11" text-anchor="start" fill="#555555">hard negative</text>
+<rect x="356.0" y="406" width="14" height="12" fill="#d9d9d9" stroke="#9a9a9a"/>
+<text x="376.0" y="416.0" font-size="11" text-anchor="start" fill="#555555">masked</text>
+<rect x="429.0" y="406" width="14" height="12" fill="#e6d9f2" stroke="#7a52a0"/>
+<text x="449.0" y="416.0" font-size="11" text-anchor="start" fill="#555555">side input</text>
+</svg>
+</div>
+<div id="step"></div>
+<p class="cap">Hover a block for shapes and details · click to trace its data flow · click empty space to reset.</p>
+</main><div id="tip"></div>
+<script>
+const META={"M": {"title": "logits ℓij = s·⟨ea_i, ec_j⟩ − λj", "shape": "[B, B + K]", "info": "Row-wise softmax cross-entropy with the diagonal as target; × = labelled positives masked out of the denominator.", "params": "", "kind": "frozen"}}, EDGES=[], TAGS=[], STEPS=[];
+const svg=document.querySelector('#fig svg'), tip=document.getElementById('tip'), bar=document.getElementById('bar');
+const $=id=>svg.getElementById?svg.getElementById(id):document.getElementById(id);
+svg.querySelectorAll('title').forEach(t=>t.remove());
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function fmt(s){return esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/_\{([^}]+)\}/g,'<sub>$1</sub>').replace(/\^\{([^}]+)\}/g,'<sup>$1</sup>')}
+svg.querySelectorAll('.node.ia').forEach(g=>{
+  const m=META[g.id]; if(!m) return;
+  g.addEventListener('mousemove',ev=>{
+    tip.innerHTML='<b>'+fmt(m.title)+'</b>'+(m.shape?'<div><code>'+fmt(m.shape)+'</code></div>':'')+
+      (m.info?'<div>'+fmt(m.info)+'</div>':'')+(m.params?'<div class="k">params: '+fmt(m.params)+'</div>':'')+
+      '<div class="k">'+m.kind+'</div>';
+    tip.style.display='block';
+    const x=Math.min(ev.clientX+14,innerWidth-360), y=Math.min(ev.clientY+14,innerHeight-tip.offsetHeight-10);
+    tip.style.left=x+'px'; tip.style.top=y+'px';});
+  g.addEventListener('mouseleave',()=>tip.style.display='none');
+  g.addEventListener('click',ev=>{ev.stopPropagation();trace(g.id)});
+});
+function reset(){svg.querySelectorAll('.dim,.hl').forEach(e=>e.classList.remove('dim','hl'));document.getElementById('step').textContent=''}
+function highlight(nodes,edges){
+  svg.querySelectorAll('.node,.edge').forEach(e=>e.classList.add('dim'));
+  nodes.forEach(n=>{const e=$(n); if(e){e.classList.remove('dim');e.classList.add('hl')}});
+  edges.forEach(n=>{const e=$(n); if(e){e.classList.remove('dim');e.classList.add('hl')}});}
+function trace(id){
+  const nodes=new Set([id]),edges=new Set();
+  for(const dir of ['from','to']){const other=dir==='from'?'to':'from';let front=[id];
+    while(front.length){const nx=[];for(const n of front)for(const e of EDGES)if(e[dir]===n&&!edges.has(e.id)){edges.add(e.id);
+      if(!nodes.has(e[other])){nodes.add(e[other]);nx.push(e[other])}}front=nx}}
+  highlight(nodes,edges);}
+document.getElementById('fig').addEventListener('click',reset);
+function btn(label,fn){const b=document.createElement('button');b.textContent=label;b.onclick=()=>fn(b);bar.appendChild(b);return b}
+TAGS.forEach(t=>btn(t.label||t.tag,b=>{const on=!b.classList.contains('on');bar.querySelectorAll('button.tag').forEach(x=>x.classList.remove('on'));
+  reset(); if(on){b.classList.add('on');const ns=[...svg.querySelectorAll('.node.tag-'+t.tag)].map(e=>e.id),
+  es=[...svg.querySelectorAll('.edge.tag-'+t.tag)].map(e=>e.id);highlight(ns,es);document.getElementById('step').textContent=t.info||''}}).classList.add('tag'));
+if(STEPS.length){let k=-1;const show=()=>{reset();if(k<0)return;const s=STEPS[k];highlight(s.nodes||[],
+  EDGES.filter(e=>(s.nodes||[]).includes(e.from)&&(s.nodes||[]).includes(e.to)).map(e=>e.id).concat(s.edges||[]));
+  document.getElementById('step').innerHTML='<b>'+(k+1)+'/'+STEPS.length+'</b> '+fmt(s.text||'')};
+  btn('◀ step',()=>{k=Math.max(-1,k-1);show()});btn('step ▶',()=>{k=Math.min(STEPS.length-1,k+1);show()});}
+btn('SVG ⤓',()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([svg.outerHTML],{type:'image/svg+xml'}));
+  a.download='infonce_logits.svg';a.click()});
+btn('PNG ⤓',()=>{const vb=svg.viewBox.baseVal,c=document.createElement('canvas');c.width=vb.width*2;c.height=vb.height*2;
+  const img=new Image();img.onload=()=>{c.getContext('2d').drawImage(img,0,0,c.width,c.height);c.toBlob(b=>{const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download='infonce_logits.png';a.click()})};
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg.outerHTML)});
+</script></body></html>

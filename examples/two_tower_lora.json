@@ -1,0 +1,488 @@
+{
+ "name": "two_tower_lora",
+ "title": "Fig. 1. Two-tower retrieval encoder with LoRA and a Matryoshka head",
+ "width": 1180,
+ "height": 470,
+ "legend": [
+  "frozen",
+  "train",
+  "tensor",
+  "side",
+  "loss"
+ ],
+ "caption": "Weights are shared between the towers (dashed). Losses are averaged over Matryoshka prefixes d ∈ {256, 64}.",
+ "tags": [
+  {
+   "tag": "lora",
+   "label": "trainable",
+   "info": "Only LoRA adapters, the head and the temperature receive gradients."
+  },
+  {
+   "tag": "anchor",
+   "label": "anchor tower"
+  },
+  {
+   "tag": "loss",
+   "label": "objective",
+   "info": "ℒ = ℒ_NCE + ℒ_BCE over in-batch and hard negatives."
+  }
+ ],
+ "steps": [
+  {
+   "nodes": [
+    "xa",
+    "enc_a",
+    "pool_a"
+   ],
+   "text": "The anchor text is encoded by a decoder-only LM; the last token is the sequence embedding."
+  },
+  {
+   "nodes": [
+    "pool_a",
+    "phi_a",
+    "side_a"
+   ],
+   "text": "A side embedding is concatenated with the LM vector: φ = [w; z; 𝟙_z]."
+  },
+  {
+   "nodes": [
+    "phi_a",
+    "head_a",
+    "e_a"
+   ],
+   "text": "A residual MLP head maps φ to 256d; prefixes are ℓ2-normalised (Matryoshka)."
+  },
+  {
+   "nodes": [
+    "e_a",
+    "e_c",
+    "sim",
+    "loss"
+   ],
+   "text": "Cosine logits with a learned temperature feed InfoNCE + BCE."
+  }
+ ],
+ "nodes": [
+  {
+   "id": "xa",
+   "type": "tensor",
+   "x": 30,
+   "y": 85,
+   "w": 70,
+   "h": 40,
+   "label": "x_{a}",
+   "dim": "T tokens",
+   "shape": "[T]",
+   "info": "Anchor post text, tokenised.",
+   "tags": [
+    "anchor"
+   ]
+  },
+  {
+   "id": "enc_a",
+   "type": "block",
+   "x": 140,
+   "y": 60,
+   "w": 230,
+   "h": 90,
+   "stack": true,
+   "label": [
+    "Decoder LM",
+    "d_{model} = 2048",
+    "W_{0} frozen"
+   ],
+   "shape": "[T] → [T, 2048]",
+   "info": "Causal self-attention + SwiGLU blocks. LoRA on q, k, v, o, gate, up, down; y = W₀x + (α/r)·BAx.",
+   "params": "≈2B frozen, ≈20M LoRA",
+   "tags": [
+    "anchor",
+    "lora"
+   ],
+   "strip": {
+    "kind": "train",
+    "label": [
+     "LoRA",
+     "r=16"
+    ]
+   },
+   "badge": "× L"
+  },
+  {
+   "id": "pool_a",
+   "type": "block",
+   "x": "enc_a.r+40",
+   "y": 78,
+   "w": 96,
+   "h": 54,
+   "label": [
+    "last-token",
+    "pool"
+   ],
+   "shape": "[T, 2048] → [2048]",
+   "tags": [
+    "anchor"
+   ]
+  },
+  {
+   "id": "side_a",
+   "type": "block",
+   "kind": "side",
+   "x": "pool_a.l",
+   "y": 165,
+   "w": 96,
+   "h": 34,
+   "label": [
+    "side emb z"
+   ],
+   "size": 12,
+   "shape": "[96]",
+   "info": "Precomputed embedding from another model (frozen)."
+  },
+  {
+   "id": "phi_a",
+   "type": "tensor",
+   "x": "pool_a.r+50",
+   "y": 50,
+   "w": 24,
+   "h": 110,
+   "segments": [
+    [
+     0.86,
+     "tensor",
+     "w"
+    ],
+    [
+     0.1,
+     "side",
+     "z"
+    ],
+    [
+     0.04,
+     "mask",
+     ""
+    ]
+   ],
+   "label": "φ_{a}",
+   "dim": "2145",
+   "shape": "[2048 + 96 + 1]",
+   "tags": [
+    "anchor"
+   ]
+  },
+  {
+   "id": "head_a",
+   "type": "block",
+   "kind": "train",
+   "x": "phi_a.r+50",
+   "y": 70,
+   "w": 170,
+   "h": 70,
+   "label": [
+    "Head h",
+    "W_{0}φ + MLP(φ)"
+   ],
+   "shape": "[2145] → [256]",
+   "info": "Residual MLP: LN → Linear 2048 → GELU → Dropout → Linear 256, plus a linear skip initialised to the identity slice.",
+   "tags": [
+    "anchor",
+    "lora"
+   ]
+  },
+  {
+   "id": "e_a",
+   "type": "tensor",
+   "kind": "train",
+   "x": "head_a.r+46",
+   "y": 55,
+   "w": 22,
+   "h": 100,
+   "segments": [
+    [
+     0.25,
+     "hard",
+     ""
+    ],
+    [
+     0.75,
+     "train",
+     ""
+    ]
+   ],
+   "label": "e_{a}",
+   "shape": "[256] ⊃ [64]",
+   "info": "ℓ2-normalised after slicing.",
+   "tags": [
+    "anchor"
+   ],
+   "dim": "256 ⊃ 64"
+  },
+  {
+   "id": "xc",
+   "type": "tensor",
+   "x": 30,
+   "y": 305,
+   "w": 70,
+   "h": 40,
+   "label": "x_{c}",
+   "dim": "T tokens",
+   "shape": "[T]",
+   "info": "Candidate post text."
+  },
+  {
+   "id": "enc_c",
+   "type": "block",
+   "x": 140,
+   "y": 280,
+   "w": 230,
+   "h": 90,
+   "stack": true,
+   "label": [
+    "Decoder LM",
+    "d_{model} = 2048",
+    "W_{0} frozen"
+   ],
+   "shape": "[T] → [T, 2048]",
+   "tags": [
+    "lora"
+   ],
+   "strip": {
+    "kind": "train",
+    "label": [
+     "LoRA",
+     "r=16"
+    ]
+   },
+   "badge": "× L"
+  },
+  {
+   "id": "pool_c",
+   "type": "block",
+   "x": "enc_c.r+40",
+   "y": 298,
+   "w": 96,
+   "h": 54,
+   "label": [
+    "last-token",
+    "pool"
+   ],
+   "shape": "[T, 2048] → [2048]"
+  },
+  {
+   "id": "side_c",
+   "type": "block",
+   "kind": "side",
+   "x": "pool_c.l",
+   "y": 385,
+   "w": 96,
+   "h": 34,
+   "label": [
+    "side emb z"
+   ],
+   "size": 12,
+   "shape": "[96]"
+  },
+  {
+   "id": "phi_c",
+   "type": "tensor",
+   "x": "pool_c.r+50",
+   "y": 270,
+   "w": 24,
+   "h": 110,
+   "segments": [
+    [
+     0.86,
+     "tensor",
+     "w"
+    ],
+    [
+     0.1,
+     "side",
+     "z"
+    ],
+    [
+     0.04,
+     "mask",
+     ""
+    ]
+   ],
+   "label": "φ_{c}",
+   "dim": "2145",
+   "shape": "[2145]"
+  },
+  {
+   "id": "head_c",
+   "type": "block",
+   "kind": "train",
+   "x": "phi_c.r+50",
+   "y": 290,
+   "w": 170,
+   "h": 70,
+   "label": [
+    "Head h",
+    "W_{0}φ + MLP(φ)"
+   ],
+   "shape": "[2145] → [256]",
+   "tags": [
+    "lora"
+   ]
+  },
+  {
+   "id": "e_c",
+   "type": "tensor",
+   "kind": "train",
+   "x": "head_c.r+46",
+   "y": 275,
+   "w": 22,
+   "h": 100,
+   "segments": [
+    [
+     0.25,
+     "hard",
+     ""
+    ],
+    [
+     0.75,
+     "train",
+     ""
+    ]
+   ],
+   "label": "e_{c}",
+   "shape": "[256] ⊃ [64]",
+   "dim": "256 ⊃ 64"
+  },
+  {
+   "id": "sim",
+   "type": "op",
+   "x": "e_a.r+50",
+   "y": 187,
+   "w": 56,
+   "label": [
+    "s·cos"
+   ],
+   "size": 12,
+   "shape": "[B, B+K]",
+   "info": "Logits s·⟨e_a, e_c⟩, s = 1/τ learned.",
+   "tags": [
+    "loss"
+   ]
+  },
+  {
+   "id": "loss",
+   "type": "block",
+   "kind": "loss",
+   "x": "sim.r+36",
+   "y": "sim.cy-25",
+   "w": 140,
+   "h": 50,
+   "label": [
+    "ℒ_{NCE} + ℒ_{BCE}",
+    "mean over d"
+   ],
+   "tags": [
+    "loss"
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "from": "xa.r",
+   "to": "enc_a.l",
+   "tags": [
+    "anchor"
+   ]
+  },
+  {
+   "from": "enc_a.r",
+   "to": "pool_a.l",
+   "label": "H",
+   "tags": [
+    "anchor"
+   ]
+  },
+  {
+   "from": "pool_a.r",
+   "to": "phi_a.l",
+   "tags": [
+    "anchor"
+   ]
+  },
+  {
+   "from": "side_a.r",
+   "to": "phi_a.l+44",
+   "mid": "phi_a.l-20"
+  },
+  {
+   "from": "phi_a.r",
+   "to": "head_a.l",
+   "tags": [
+    "anchor"
+   ]
+  },
+  {
+   "from": "head_a.r",
+   "to": "e_a.l",
+   "tags": [
+    "anchor"
+   ]
+  },
+  {
+   "from": "xc.r",
+   "to": "enc_c.l"
+  },
+  {
+   "from": "enc_c.r",
+   "to": "pool_c.l",
+   "label": "H"
+  },
+  {
+   "from": "pool_c.r",
+   "to": "phi_c.l"
+  },
+  {
+   "from": "side_c.r",
+   "to": "phi_c.l+44",
+   "mid": "phi_c.l-20"
+  },
+  {
+   "from": "phi_c.r",
+   "to": "head_c.l"
+  },
+  {
+   "from": "head_c.r",
+   "to": "e_c.l"
+  },
+  {
+   "from": "e_a.r",
+   "to": "sim.t",
+   "tags": [
+    "loss"
+   ]
+  },
+  {
+   "from": "enc_a.b",
+   "to": "enc_c.t",
+   "style": "share",
+   "label": "shared θ"
+  },
+  {
+   "from": "head_a.b",
+   "to": "head_c.t",
+   "style": "share",
+   "label": "shared"
+  },
+  {
+   "from": "e_c.r",
+   "to": "sim.b",
+   "tags": [
+    "loss"
+   ]
+  },
+  {
+   "from": "sim.r",
+   "to": "loss.l",
+   "tags": [
+    "loss"
+   ]
+  }
+ ]
+}
